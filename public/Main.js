@@ -35,12 +35,12 @@ Main = function()
             // console.log(overview_paths[i]);
             //角度を計算する。
             //10までにする。
-            if( i < 20)
-            {
+            // if( i < 20)
+            // {
                 var direction = geoDirection(overview_paths[i]['d'],overview_paths[i]['e'],overview_paths[i+1]['d'],overview_paths[i+1]['e']);
                 var streetview_path = "http://maps.googleapis.com/maps/api/streetview?size=650x650&location="+overview_paths[i]['d']+","+overview_paths[i]['e']+"&heading="+ direction+"&sensor=false";
                 streetview_path_array[i] = streetview_path;
-            }
+            // }
         }
         // console.log(streetview_path_array);
 
@@ -53,6 +53,10 @@ Main = function()
             window.scrollTo(0, 1); //アドレスバーを消す
             ja.imageUnitObj.removeEventListener("onLoad",this);
             console.log('画像のロード終わる');
+
+            //フォルダを生成する。
+            jQuery.post('/start');
+
 
             //2秒ごとに表示
             var sleep_time = 1000;
@@ -73,6 +77,7 @@ Main = function()
                 image.w = $(window).width();
                 image.h = 680;
                 //画像を取得する。
+
 
 
                 // 処理済みのパラメータ削除
