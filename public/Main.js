@@ -136,7 +136,7 @@ function geoDirection(lat1, lng1, lat2, lng2) {
 var handleDirectionsRoute = function(response) {
 
     var route = response.routes[0];
-    var _max_points = 500;
+    var _max_points = 300;
     var _distance_between_points = 5;
     // var pointOnLine =
     var path = route.overview_path;
