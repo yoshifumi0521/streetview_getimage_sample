@@ -10,9 +10,11 @@ Main = function()
 
     // return;
     //スタートポイント
-    var start_point = new google.maps.LatLng(35.728926,139.71038);
+    // var start_point = new google.maps.LatLng(35.728926,139.71038);
+    var start_point = new google.maps.LatLng(26.331624,127.921188);
     //エンドポイント
-    var end_point = new google.maps.LatLng(35.709495,139.733538);
+    // var end_point = new google.maps.LatLng(35.709495,139.733538);
+    var end_point = new google.maps.LatLng(26.327874,127.957173);
 
     var position_array;
 
@@ -24,6 +26,9 @@ Main = function()
     };
     directions_service.route(request, function(response, status)
     {
+        // handleDirectionsRoute(response);
+
+        // return;
         //ルートの取得に成功
         console.log("ルートの取得に成功");
         //位置情報を取得する。
@@ -42,7 +47,7 @@ Main = function()
                 streetview_path_array[i] = streetview_path;
             // }
         }
-        // console.log(streetview_path_array);
+        console.log(streetview_path_array.length);
 
         //画像をすべてロードする。
         ja.imageUnitObj.addEventListener("onLoad",this);
@@ -130,8 +135,86 @@ function geoDirection(lat1, lng1, lat2, lng2) {
     return dirN0;
 }
 
+var handleDirectionsRoute = function(response) {
+
+    var route = response.routes[0];
+    var _max_points = 100;
+    var _distance_between_points = 5;
+    // var pointOnLine =
+    var path = route.overview_path;
+    console.log("はじめの点の数"+path.length);
+    console.log(path);
+    var _raw_points = [];
+    var legs = route.legs;
 
 
+    var total_distance = 0;
+    for(var i=0; i<legs.length; ++i) {
+        total_distance += legs[i].distance.value;
+    }
 
+    var segment_length = total_distance/_max_points;
+    _d = (segment_length < _distance_between_points) ? _d = _distance_between_points : _d = segment_length;
+
+    var d = 0;
+    var r = 0;
+    var a, b;
+
+    for(i=0; i<path.length; i++) {
+        if(i+1 < path.length) {
+
+            a = path[i];
+            b = path[i+1];
+            d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
+            // console.log("d"+d);
+            if(r > 0 && r < d) {
+                a = pointOnLine(r/d, a, b);
+                d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
+                _raw_points.push(a);
+
+                r = 0;
+            } else if(r > 0 && r > d) {
+                r -= d;
+            }
+
+            if(r === 0) {
+                var segs = Math.floor(d/_d);
+
+                if(segs > 0) {
+                    for(var j=0; j<segs; j++) {
+                        var t = j/segs;
+
+                        if( t>0 || (t+i)===0  ) { // not start point
+                            var way = pointOnLine(t, a, b);
+                            _raw_points.push(way);
+                        }
+                    }
+
+                    r = d-(_d*segs);
+                } else {
+                    r = _d*( 1-(d/_d) );
+                }
+            }
+
+        } else {
+            _raw_points.push(path[i]);
+        }
+    }
+    console.log("結果的な点の数"+_raw_points.length);
+    console.log(_raw_points);
+
+    // parsePoints(response);
+
+};
+
+var pointOnLine = function(t, a, b) {
+    var lat1 = a.lat().toRad(), lon1 = a.lng().toRad();
+    var lat2 = b.lat().toRad(), lon2 = b.lng().toRad();
+
+    x = lat1 + t * (lat2 - lat1);
+    y = lon1 + t * (lon2 - lon1);
+
+    return new google.maps.LatLng(x.toDeg(), y.toDeg());
+};
 
 
