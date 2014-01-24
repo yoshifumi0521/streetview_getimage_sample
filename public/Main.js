@@ -59,7 +59,7 @@ Main = function()
 
 
             //2秒ごとに表示
-            var sleep_time = 1000;
+            var sleep_time = 200;
             // 実処理の実行
             act();
             function act(){
