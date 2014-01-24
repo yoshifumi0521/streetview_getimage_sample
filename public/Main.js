@@ -29,8 +29,8 @@ Main = function()
         //ルートの取得に成功
         console.log("ルートの取得に成功");
         //位置情報を取得する。
-        // var overview_paths = response['routes'][0]['overview_path'];
-        var overview_paths = handleDirectionsRoute(response);
+        var overview_paths = response['routes'][0]['overview_path'];
+        // var overview_paths = handleDirectionsRoute(response);
         var streetview_path_array = [];
         for(var i=0,d = overview_paths.length; i < overview_paths.length-1; i++ )
         {
@@ -44,7 +44,7 @@ Main = function()
                 streetview_path_array[i] = streetview_path;
             // }
         }
-        console.log(streetview_path_array);
+        // console.log(streetview_path_array);
         console.log(streetview_path_array.length);
 
         //画像をすべてロードする。
@@ -136,7 +136,7 @@ function geoDirection(lat1, lng1, lat2, lng2) {
 var handleDirectionsRoute = function(response) {
 
     var route = response.routes[0];
-    var _max_points = 100;
+    var _max_points = 500;
     var _distance_between_points = 5;
     // var pointOnLine =
     var path = route.overview_path;
