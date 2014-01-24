@@ -10,11 +10,11 @@ Main = function()
 
     // return;
     //スタートポイント
-    // var start_point = new google.maps.LatLng(35.728926,139.71038);
-    var start_point = new google.maps.LatLng(26.331624,127.921188);
+    var start_point = new google.maps.LatLng(34.347633,130.895359);
+    // var start_point = new google.maps.LatLng(26.331624,127.921188);
     //エンドポイント
-    // var end_point = new google.maps.LatLng(35.709495,139.733538);
-    var end_point = new google.maps.LatLng(26.327874,127.957173);
+    var end_point = new google.maps.LatLng(34.35198,130.85118);
+    // var end_point = new google.maps.LatLng(26.327874,127.957173);
 
     var position_array;
 
@@ -26,14 +26,11 @@ Main = function()
     };
     directions_service.route(request, function(response, status)
     {
-        // handleDirectionsRoute(response);
-
-        // return;
         //ルートの取得に成功
         console.log("ルートの取得に成功");
         //位置情報を取得する。
-        var overview_paths = response['routes'][0]['overview_path'];
-        // console.log(response);
+        // var overview_paths = response['routes'][0]['overview_path'];
+        var overview_paths = handleDirectionsRoute(response);
         var streetview_path_array = [];
         for(var i=0,d = overview_paths.length; i < overview_paths.length-1; i++ )
         {
@@ -47,6 +44,7 @@ Main = function()
                 streetview_path_array[i] = streetview_path;
             // }
         }
+        console.log(streetview_path_array);
         console.log(streetview_path_array.length);
 
         //画像をすべてロードする。
@@ -142,8 +140,8 @@ var handleDirectionsRoute = function(response) {
     var _distance_between_points = 5;
     // var pointOnLine =
     var path = route.overview_path;
-    console.log("はじめの点の数"+path.length);
-    console.log(path);
+    // console.log("はじめの点の数"+path.length);
+    // console.log(path);
     var _raw_points = [];
     var legs = route.legs;
 
@@ -162,13 +160,13 @@ var handleDirectionsRoute = function(response) {
 
     for(i=0; i<path.length; i++) {
         if(i+1 < path.length) {
-
             a = path[i];
             b = path[i+1];
             d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
-            // console.log("d"+d);
             if(r > 0 && r < d) {
+
                 a = pointOnLine(r/d, a, b);
+
                 d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
                 _raw_points.push(a);
 
@@ -178,6 +176,7 @@ var handleDirectionsRoute = function(response) {
             }
 
             if(r === 0) {
+
                 var segs = Math.floor(d/_d);
 
                 if(segs > 0) {
@@ -196,15 +195,15 @@ var handleDirectionsRoute = function(response) {
                 }
             }
 
-        } else {
+        }
+        else
+        {
             _raw_points.push(path[i]);
         }
     }
-    console.log("結果的な点の数"+_raw_points.length);
-    console.log(_raw_points);
 
     // parsePoints(response);
-
+    return _raw_points;
 };
 
 var pointOnLine = function(t, a, b) {
@@ -216,5 +215,18 @@ var pointOnLine = function(t, a, b) {
 
     return new google.maps.LatLng(x.toDeg(), y.toDeg());
 };
+
+//toRadファンクションを追加した。
+if(typeof(Number.prototype.toRad) === "undefined") {
+    Number.prototype.toRad = function() {
+        return this * Math.PI / 180;
+    }
+}
+
+if(typeof(Number.prototype.toDeg) === "undefined") {
+    Number.prototype.toDeg = function() {
+        return this * 180 / Math.PI;
+    }
+}
 
 
