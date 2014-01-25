@@ -22,18 +22,48 @@ Main = function()
     var start_point_marker = new google.maps.Marker({
         position: start_point,
         map: map,
-        title: "スタート地点"
+        title: "スタート地点",
+        draggable: true,
+        icon: "http://maps.google.com/mapfiles/marker_black.png"
     });
+    var start_point_window = new google.maps.InfoWindow({
+        content: "スタート地点",
+        maxWidth: 100
+    });
+    start_point_window.open(map,start_point_marker);
     var end_point_marker = new google.maps.Marker({
         position: end_point,
         map: map,
-        title: "エンド地点"
+        title: "エンド地点",
+        draggable: true
+    });
+    var end_point_window = new google.maps.InfoWindow({
+        content: "エンド地点",
+        maxWidth: 100
+    });
+    end_point_window.open(map,end_point_marker);
+    google.maps.event.addListener(start_point_marker,"dragend",function(e)
+    {
+        console.log(e);
+        // marker.
+        // window.setTimeout(function() {
+        //   map.panTo(marker.getPosition());
+        // }, 3000);
+    });
+    google.maps.event.addListener(end_point_marker,"dragend",function(e)
+    {
+        console.log(e);
+        // marker.
+        // window.setTimeout(function() {
+        //   map.panTo(marker.getPosition());
+        // }, 3000);
     });
 
 
 
 
-    return;
+
+    // return;
 
     var position_array;
 
@@ -156,7 +186,7 @@ function geoDirection(lat1, lng1, lat2, lng2) {
 var handleDirectionsRoute = function(response) {
 
     var route = response.routes[0];
-    var _max_points =100;
+    var _max_points = 100;
     var _distance_between_points = 5;
     // var pointOnLine =
     var path = route.overview_path;
