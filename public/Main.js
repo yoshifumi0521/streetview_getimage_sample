@@ -2,11 +2,6 @@
 Main = function()
 {
     //ここから処理がはじまる。
-    //canvasを使う。
-    // ja_CanvasSet();
-    // console.log('position_arr');
-
-
     //沖縄の地点
     var start_point = new google.maps.LatLng(26.331624,127.921188);
     var end_point = new google.maps.LatLng(26.327874,127.957173);
@@ -24,6 +19,17 @@ Main = function()
     map = new google.maps.Map(document.getElementById("map"), mapOpt);
 
     //スタート地点とエンドポイントにマークをつける。
+    var start_point_marker = new google.maps.Marker({
+        position: start_point,
+        map: map,
+        title: "スタート地点"
+    });
+    var end_point_marker = new google.maps.Marker({
+        position: end_point,
+        map: map,
+        title: "エンド地点"
+    });
+
 
 
 
