@@ -10,6 +10,9 @@ Main = function()
     //沖縄の地点
     var start_point = new google.maps.LatLng(26.331624,127.921188);
     var end_point = new google.maps.LatLng(26.327874,127.957173);
+    //スタート地点とエンド地点の経度緯度を表示
+    document.getElementById("start_point").value = start_point["d"]+","+start_point["e"];
+    document.getElementById("end_point").value = end_point["d"]+","+end_point["e"];
 
     //GoogleMapを表示
     var map;
@@ -19,6 +22,10 @@ Main = function()
         zoom: 12
     };
     map = new google.maps.Map(document.getElementById("map"), mapOpt);
+
+    //スタート地点とエンドポイントにマークをつける。
+
+
 
     return;
 

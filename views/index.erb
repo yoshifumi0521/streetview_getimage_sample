@@ -34,7 +34,7 @@ body #form{
     z-index : 7;
     top: 0px;
     left: 420px;
-    width: 400px;
+    width: 500px;
     /*height: 300px;*/
     /*position: fixed;*/
 }
@@ -51,27 +51,27 @@ div {
     <div id="map" style=""></div>
     <div id="form">
             <div>
-                スタート地点: <span id="start_point"></span>
+                <strong>スタート地点(緯度,経度)</strong>: <input type="text" id="start_point" style="width:250px;">
             </div>
             <br>
             <div>
-                エンド地点: <span id="end_point"></span>
+                <strong>エンド地点(緯度,経度)</strong>: <input type="text" id="end_point" value="" style="width:250px;">
             </div>
             <br>
             <div>
-                Max_Point: <input type="text" id="max_point" value="100"/>
+                <strong>Max_Point</strong>: <input type="text" id="max_point" value="100"/>
             </div>
             <br>
             <div>
-                画像保存 <input type="checkbox" id="save_image" />
+                <strong>画像保存</strong> <input type="checkbox" id="save_image" />
             </div>
             <br>
             <div>
-                フレーム数: <span id="frame"></span>
+                <strong>フレーム数</strong>: <span id="frame"></span>
             </div>
             <br>
             <div>
-                状態: <span id="state"></span>
+                <strong>状態</strong>: <span id="state"></span>
             </div>
             <br>
             <div>
