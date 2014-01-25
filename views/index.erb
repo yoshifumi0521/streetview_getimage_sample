@@ -17,19 +17,76 @@ body{
 }
 
 body #wrapper{
+    z-index : 5;
     width: 100%;
     height: 100%;
     position: fixed;
 }
 
+body #map{
+    z-index : 6;
+    width: 400px;
+    height: 300px;
+    /*position: fixed;*/
+}
+
+body #form{
+    z-index : 7;
+    top: 0px;
+    left: 420px;
+    width: 400px;
+    /*height: 300px;*/
+    /*position: fixed;*/
+}
+
+
+div {
+    position : absolute;
+}
+
 </style>
 </head>
 <body>
-    <body>
-        <div id="wrapper">
-            <canvas id="ja_canvas" style="backgroud-color: red"></canvas>
-        </div>
-    </body>
+    <!-- <div id="controls"> -->
+    <div id="map" style=""></div>
+    <div id="form">
+            <div>
+                スタート地点: <span id="start_point"></span>
+            </div>
+            <br>
+            <div>
+                エンド地点: <span id="end_point"></span>
+            </div>
+            <br>
+            <div>
+                Max_Point: <input type="text" id="max_point" value="100"/>
+            </div>
+            <br>
+            <div>
+                画像保存 <input type="checkbox" id="save_image" />
+            </div>
+            <br>
+            <div>
+                フレーム数: <span id="frame"></span>
+            </div>
+            <br>
+            <div>
+                状態: <span id="state"></span>
+            </div>
+            <br>
+            <div>
+                <button type="button" id="start" >スタート</button>
+            </div>
+    </div>
+        <!-- div id="controls" style="">
+
+        </div> -->
+        <!-- <div id="text" style="width: 500px; height: 120px; float: left; padding-top: 10px; z-index:0; border-style:solid; border-width:medium;"></div> -->
+    <!-- </div> -->
+    <div id="wrapper">
+        <canvas id="ja_canvas" style="backgroud-color: red"></canvas>
+    </div>
+
 </body>
 <script>
 $(function () {

@@ -7,12 +7,20 @@ Main = function()
     // console.log('position_arr');
 
 
-
-    // return;
-
-    //沖縄
+    //沖縄の地点
     var start_point = new google.maps.LatLng(26.331624,127.921188);
     var end_point = new google.maps.LatLng(26.327874,127.957173);
+
+    //GoogleMapを表示
+    var map;
+    var mapOpt = {
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        center: start_point,
+        zoom: 12
+    };
+    map = new google.maps.Map(document.getElementById("map"), mapOpt);
+
+    return;
 
     var position_array;
 
