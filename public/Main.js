@@ -10,11 +10,14 @@ Main = function()
 
     // return;
     //スタートポイント
-    var start_point = new google.maps.LatLng(34.347633,130.895359);
+    // var start_point = new google.maps.LatLng(34.347633,130.895359);
     // var start_point = new google.maps.LatLng(26.331624,127.921188);
+    var start_point = new google.maps.LatLng(32.4395065,130.2164224);
+
     //エンドポイント
-    var end_point = new google.maps.LatLng(34.35198,130.85118);
+    // var end_point = new google.maps.LatLng(34.35198,130.85118);
     // var end_point = new google.maps.LatLng(26.327874,127.957173);
+    var end_point = new google.maps.LatLng(32.4762972,130.1826051);
 
     var position_array;
 
@@ -29,8 +32,8 @@ Main = function()
         //ルートの取得に成功
         console.log("ルートの取得に成功");
         //位置情報を取得する。
-        // var overview_paths = response['routes'][0]['overview_path'];
-        var overview_paths = handleDirectionsRoute(response);
+        var overview_paths = response['routes'][0]['overview_path'];
+        // var overview_paths = handleDirectionsRoute(response);
         var streetview_path_array = [];
         for(var i=0,d = overview_paths.length; i < overview_paths.length-1; i++ )
         {
@@ -136,7 +139,7 @@ function geoDirection(lat1, lng1, lat2, lng2) {
 var handleDirectionsRoute = function(response) {
 
     var route = response.routes[0];
-    var _max_points = 300;
+    var _max_points =100;
     var _distance_between_points = 5;
     // var pointOnLine =
     var path = route.overview_path;
