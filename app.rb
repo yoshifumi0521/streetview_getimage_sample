@@ -5,6 +5,8 @@ require 'sinatra/reloader'
 require 'fileutils'
 require 'base64'
 require 'open-uri'
+require 'find'
+# require 'RMagick'
 
 # configure do
 #   enable :cross_origin
@@ -13,6 +15,21 @@ require 'open-uri'
 get '/' do
   # cross_origin
   erb :index
+end
+
+get '/downloads' do
+  @directories = Array.new
+  Dir::foreach('data') {|f|
+    if f != '.' && f!= '..' && f!= '.DS_Store'
+      @directories.push f
+    end
+    # if File::ftype(f) == "directory"
+    #   puts "#{f} is directory"
+    # end
+  }
+  p @directories
+  # @directories = "aaa"
+  erb :downloads
 end
 
 #フォルダを作成する。
@@ -32,17 +49,6 @@ post '/save' do
   dirName = "data/#{name}/"
   filePath = dirName + fileName
   url = params[:url]
-
-  # write image adata
-  # open(filePath, 'wb') do |output|
-  #   open(url) do |data|
-  #     output.write(data.read)
-  #   end
-  # end
-  # open(filePath,'wb') do |file|
-  #   open(url) do |data|
-  #     file.write(data.read)
-  #   end
   # end
   begin
     open(filePath, 'wb') do |output|
@@ -56,5 +62,8 @@ post '/save' do
   end
 
 end
+
+
+
 
 

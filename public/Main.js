@@ -179,7 +179,7 @@ StreetView = function()
                 }
             }
 
-            return;
+            // return;
             //画像をすべてロードする。
             ja.imageUnitObj.addEventListener("onLoad",this);
             ja.imageUnitObj.load(streetview_path_array);
