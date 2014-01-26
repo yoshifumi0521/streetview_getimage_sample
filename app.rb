@@ -6,6 +6,10 @@ require 'fileutils'
 require 'base64'
 require 'open-uri'
 require 'find'
+require 'zip/zip'
+require 'kconv'
+# require 'net/http'
+require 'open-uri'
 # require 'RMagick'
 
 # configure do
@@ -18,18 +22,50 @@ get '/' do
 end
 
 get '/downloads' do
-  @directories = Array.new
-  Dir::foreach('data') {|f|
+  FileUtils.mkdir_p("zip") unless FileTest.exist?("zip")
+  # #ここですべて圧縮する。
+  Dir::foreach("data") do |d|
+    # next if d == "." or d == ".." or d == ".DS_Store"
+    # next if File::ftype(d) != "directory"
+    #   puts d
+    if d != '.' && d!= '..' && d!= '.DS_Store'
+      zip(d, "zip/"+ d + ".zip", :fs_encoding => "Shift_JIS")
+    end
+  end
+
+  @zips = Array.new
+  Dir::foreach('zip') {|f|
     if f != '.' && f!= '..' && f!= '.DS_Store'
-      @directories.push f
+      @zips.push f
     end
     # if File::ftype(f) == "directory"
     #   puts "#{f} is directory"
     # end
   }
-  p @directories
+  p @zips
   # @directories = "aaa"
   erb :downloads
+end
+
+get '/download/:name' do
+  # filename = "data/"+params[:name]
+  # filename = "data/test1.zip"
+  # open(filename, 'wb'){|file|
+  #   OpenURI.open_uri(url, {:proxy=>nil}){|data|  #プロクシは使わない
+  #     puts "\t"+data.content_type #ダウンロードするファイルのタイプを表示
+  #     file.write(data.read) #ファイル名で保存
+  #   }
+  # }
+  # open(filename, "r"){|io|
+  #   while line=io.gets  #line = filepath(url)
+  #     line.chomp!
+  #     print line
+  #     save_file(line.chomp)
+  #   end
+  # }
+  File.chmod(0777,'zip/'+params[:name])
+  send_file 'zip/'+params[:name]
+
 end
 
 #フォルダを作成する。
@@ -63,7 +99,35 @@ post '/save' do
 
 end
 
+def zip(src, dest, options = {})
+  File.unlink(dest) if File.exist?(dest)
+  Zip::ZipFile.open(dest, Zip::ZipFile::CREATE) do |zf|
+    make_zip(zf, src, options)
+  end
+end
 
+def make_zip(zf, src, options)
+  if File.file?(src)
+    zf.add(src, src)
+    return
+  elsif File.directory?(src)
+    zf.mkdir(src)
+    Dir.foreach(src) do |f|
+      next if f == "." or f == ".."
+      make_zip(zf, src + '/' + f, options)
+    end
+    return
+  end
+end
 
+def save_file(url)
+  filename = File.basename(url)
+  open(filename, 'wb'){|file|
+    OpenURI.open_uri(url, {:proxy=>nil}){|data|  #ƒvƒƒNƒV‚ÍŽg‚í‚È‚¢ #use proxy {:proxy=>'address : port'}
+      puts "\t"+data.content_type #ƒ_ƒEƒ“ƒ[ƒh‚·‚éƒtƒ@ƒCƒ‹‚Ìƒ^ƒCƒv‚ð•\Ž¦
+      file.write(data.read) #ƒtƒ@ƒCƒ‹–¼‚Å•Û‘¶
+    }
+  }
+end
 
 

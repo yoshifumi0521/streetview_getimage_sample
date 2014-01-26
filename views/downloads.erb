@@ -16,10 +16,10 @@
 <body>
 
 <h1>ダウンロードした画像一覧</h1>
-
+<p>クリックするとダウンロードされます</p>
 <ul>
-    <% @directories.each do |f| %>
-        <li><%= f %></li>
+    <% @zips.each do |f| %>
+        <li><a href="/download/<%= f %>"><%= f %></a></li>
     <% end %>
 </ul>
 
