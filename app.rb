@@ -10,6 +10,7 @@ require 'zip/zip'
 require 'kconv'
 # require 'net/http'
 require 'open-uri'
+require 'zipruby'
 # require 'RMagick'
 
 # configure do
@@ -24,14 +25,37 @@ end
 get '/downloads' do
   FileUtils.mkdir_p("zip") unless FileTest.exist?("zip")
   # #ここですべて圧縮する。
+  # Dir::foreach("data") do |d|
+  #   # next if d == "." or d == ".." or d == ".DS_Store"
+  #   # next if File::ftype(d) != "directory"
+  #   #   puts d
+  #   if d != '.' && d!= '..' && d!= '.DS_Store'
+  #     zip(d, "zip/"+ d + ".zip", :fs_encoding => "Shift_JIS")
+  #   end
+  # end
+
   Dir::foreach("data") do |d|
-    # next if d == "." or d == ".." or d == ".DS_Store"
-    # next if File::ftype(d) != "directory"
-    #   puts d
+  #   # next if d == "." or d == ".." or d == ".DS_Store"
+  #   # next if File::ftype(d) != "directory"
+  #   #   puts d
     if d != '.' && d!= '..' && d!= '.DS_Store'
-      zip(d, "zip/"+ d + ".zip", :fs_encoding => "Shift_JIS")
+      zipfile = d + ".zip"
+      # files = ["data/"+d]
+      unless FileTest.exist?("zip/"+zipfile)
+        Zip::Archive.open("zip/"+zipfile, Zip::CREATE) do |arc|
+          p arc
+          Dir::foreach("data/"+d) do |f|
+            if f != '.' && f!= '..' && f!= '.DS_Store'
+              arc.add_file(f)
+              # p f
+            end
+          end
+        end
+      end
     end
+
   end
+
 
   @zips = Array.new
   Dir::foreach('zip') {|f|
