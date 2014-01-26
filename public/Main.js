@@ -170,18 +170,16 @@ StreetView = function()
                 var to = end_point["d"]+","+end_point["e"];
                 jQuery.post("/start/from/"+from +"/to/"+to);
 
-                //canvasの画像を作成
-                // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
-                // // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
-                // jQuery.post("/save/from/"+from +"/to/"+to,
-                // {
-                //     image: image,
-                //     index: 1
-                // });
-
+                for(var i=0,d = streetview_path_array.length; i < overview_paths.length-1; i++ )
+                {
+                    jQuery.post(
+                        "/save",
+                        {from: from,to: to,count: i+1,url: streetview_path_array[i]}
+                    );
+                }
             }
 
-            // return;
+            return;
             //画像をすべてロードする。
             ja.imageUnitObj.addEventListener("onLoad",this);
             ja.imageUnitObj.load(streetview_path_array);
@@ -216,32 +214,32 @@ StreetView = function()
                     image.w = $(window).width();
                     image.h = 680;
                     //画像を取得する。
-                    if(save_image_flag == true)
-                    {
-                        // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
-                        // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
-                        // jQuery.post("/save/from/"+from +"/to/"+to,
-                        // {
-                        //     image: image,
-                        //     index: count
-                        // });
-                        //canvasの画像を作成
-                        var img　=　new Image();
-                        var type = 'image/jpeg';
-                        // img.crossOrigin = "Anonymous";
-                        img.src = document.getElementById('ja_canvas').toDataURL(type);
-                        console.log(img.src);
-                        // img.onload = function(){
-                        // //例：現在のウィンドウに出力。
-                        //     location.href = img.src;
-                        // };
-                        // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
-                        // jQuery.post("/save/from/"+from +"/to/"+to,
-                        // {
-                        //     image: image,
-                        //     index: i
-                        // });
-                    }
+                    // if(save_image_flag == true)
+                    // {
+                    //     // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
+                    //     // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
+                    //     // jQuery.post("/save/from/"+from +"/to/"+to,
+                    //     // {
+                    //     //     image: image,
+                    //     //     index: count
+                    //     // });
+                    //     //canvasの画像を作成
+                    //     var img　=　new Image();
+                    //     var type = 'image/jpeg';
+                    //     // img.crossOrigin = "Anonymous";
+                    //     img.src = document.getElementById('ja_canvas').toDataURL(type);
+                    //     console.log(img.src);
+                    //     // img.onload = function(){
+                    //     // //例：現在のウィンドウに出力。
+                    //     //     location.href = img.src;
+                    //     // };
+                    //     // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
+                    //     // jQuery.post("/save/from/"+from +"/to/"+to,
+                    //     // {
+                    //     //     image: image,
+                    //     //     index: i
+                    //     // });
+                    // }
                     // 処理済みのパラメータ削除
                     ja.imageUnitObj.imageArray.shift();
                     // 次の回の実行予約
