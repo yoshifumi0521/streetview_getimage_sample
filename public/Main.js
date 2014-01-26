@@ -2,7 +2,174 @@
 Main = function()
 {
     //ここから処理がはじまる。
+    var streetview = new StreetView();
+    // console.log(streetview);
     //沖縄の地点
+    // var start_point = new google.maps.LatLng(26.331624,127.921188);
+    // var end_point = new google.maps.LatLng(26.327874,127.957173);
+    // //スタート地点とエンド地点の経度緯度を表示
+    // document.getElementById("start_point").value = start_point["d"]+","+start_point["e"];
+    // document.getElementById("end_point").value = end_point["d"]+","+end_point["e"];
+
+    // //GoogleMapを表示
+    // var map;
+    // var mapOpt = {
+    //     mapTypeId: google.maps.MapTypeId.ROADMAP,
+    //     center: start_point,
+    //     zoom: 12
+    // };
+    // map = new google.maps.Map(document.getElementById("map"), mapOpt);
+
+    // //スタート地点とエンドポイントにマークをつける。
+    // var start_point_marker = new google.maps.Marker({
+    //     position: start_point,
+    //     map: map,
+    //     title: "スタート地点",
+    //     draggable: true,
+    //     icon: "http://maps.google.com/mapfiles/marker_black.png"
+    // });
+    // var start_point_window = new google.maps.InfoWindow({
+    //     content: "スタート地点",
+    //     maxWidth: 100
+    // });
+    // start_point_window.open(map,start_point_marker);
+    // var end_point_marker = new google.maps.Marker({
+    //     position: end_point,
+    //     map: map,
+    //     title: "エンド地点",
+    //     draggable: true
+    // });
+    // var end_point_window = new google.maps.InfoWindow({
+    //     content: "エンド地点",
+    //     maxWidth: 100
+    // });
+    // end_point_window.open(map,end_point_marker);
+    // google.maps.event.addListener(start_point_marker,"dragend",function(e)
+    // {
+    //     console.log(e);
+    //     // marker.
+    //     // window.setTimeout(function() {
+    //     //   map.panTo(marker.getPosition());
+    //     // }, 3000);
+    // });
+    // google.maps.event.addListener(end_point_marker,"dragend",function(e)
+    // {
+    //     console.log(e);
+    //     // marker.
+    //     // window.setTimeout(function() {
+    //     //   map.panTo(marker.getPosition());
+    //     // }, 3000);
+    // });
+
+
+
+
+
+    // // return;
+
+    // var position_array;
+
+    // var directions_service = new google.maps.DirectionsService();
+    // var request = {
+    //     origin: start_point,
+    //     destination: end_point,
+    //     travelMode: google.maps.DirectionsTravelMode.DRIVING
+    // };
+    // directions_service.route(request, function(response, status)
+    // {
+    //     //ルートの取得に成功
+    //     console.log("ルートの取得に成功");
+    //     //位置情報を取得する。
+    //     // var overview_paths = response['routes'][0]['overview_path'];
+    //     var overview_paths = handleDirectionsRoute(response);
+    //     console.log(overview_paths);
+    //     var streetview_path_array = [];
+    //     for(var i=0,d = overview_paths.length; i < overview_paths.length-1; i++ )
+    //     {
+    //         // console.log(overview_paths[i]);
+    //         //角度を計算する。
+    //         //10までにする。
+    //         // if( i < 20)
+    //         // {
+    //             var direction = geoDirection(overview_paths[i]['d'],overview_paths[i]['e'],overview_paths[i+1]['d'],overview_paths[i+1]['e']);
+    //             var streetview_path = "http://maps.googleapis.com/maps/api/streetview?size=650x650&location="+overview_paths[i]['d']+","+overview_paths[i]['e']+"&heading="+ direction+"&sensor=false";
+    //             streetview_path_array[i] = streetview_path;
+    //         // }
+    //     }
+    //     // console.log(streetview_path_array);
+    //     console.log(streetview_path_array.length);
+
+    //     //画像をすべてロードする。
+    //     ja.imageUnitObj.addEventListener("onLoad",this);
+    //     ja.imageUnitObj.load(streetview_path_array);
+
+    //     this.onLoad = function()
+    //     {
+    //         window.scrollTo(0, 1); //アドレスバーを消す
+    //         ja.imageUnitObj.removeEventListener("onLoad",this);
+    //         console.log('画像のロード終わる');
+
+    //         //フォルダを生成する。
+    //         jQuery.post('/start');
+
+
+    //         //2秒ごとに表示
+    //         var sleep_time = 200;
+    //         // 実処理の実行
+    //         act();
+    //         function act(){
+    //             // パラメータが無くなっていれば終了
+    //             if(ja.imageUnitObj.imageArray.length==0) return;
+    //             // 配列の先頭を取得する。
+    //             image = ja.imageUnitObj.imageArray[0];
+    //             //画像を表示
+    //             console.log('表示する');
+    //             //画像を張る
+    //             ja.stage.addChild(image);
+    //             //大きさを調整する。
+    //             image.x = 0;
+    //             image.y = 0;
+    //             image.w = $(window).width();
+    //             image.h = 680;
+    //             //画像を取得する。
+
+
+
+    //             // 処理済みのパラメータ削除
+    //             ja.imageUnitObj.imageArray.shift();
+    //             // 次の回の実行予約
+    //             setTimeout(function(){
+    //                 act();
+    //             }, sleep_time);
+    //             // これで１回の処理は終了
+    //             console.log('一定期間スリープ');
+    //         }
+
+
+
+
+    //        ;
+
+
+
+    //     };
+
+
+
+
+
+    // });
+
+
+};
+
+//ストリートビューのオブジェクト
+StreetView = function()
+{
+    console.log("StreetViewオブジェクトを取得する。");
+    //はじめにする処理。
+    var self = this;
+    //沖縄の地点をデフォルトに設定する。
     var start_point = new google.maps.LatLng(26.331624,127.921188);
     var end_point = new google.maps.LatLng(26.327874,127.957173);
     //スタート地点とエンド地点の経度緯度を表示
@@ -42,121 +209,70 @@ Main = function()
         maxWidth: 100
     });
     end_point_window.open(map,end_point_marker);
+    //マーカーを動かしたらする処理。
     google.maps.event.addListener(start_point_marker,"dragend",function(e)
     {
-        console.log(e);
-        // marker.
-        // window.setTimeout(function() {
-        //   map.panTo(marker.getPosition());
-        // }, 3000);
+        start_point["d"] = e["latLng"]["d"];
+        start_point["e"] = e["latLng"]["e"];
+        var position = e["latLng"]["d"]+","+e["latLng"]["e"];
+        document.getElementById("start_point").value = position;
     });
     google.maps.event.addListener(end_point_marker,"dragend",function(e)
     {
-        console.log(e);
-        // marker.
-        // window.setTimeout(function() {
-        //   map.panTo(marker.getPosition());
-        // }, 3000);
+        end_point["d"] = e["latLng"]["d"];
+        end_point["e"] = e["latLng"]["e"];
+        var position = e["latLng"]["d"]+","+e["latLng"]["e"];
+        document.getElementById("end_point").value = position;
+    });
+    //緯度経度のテキストを変更したらするイベント
+    var start_point_text = document.getElementById("start_point");
+    start_point_text.addEventListener("change", function(e){
+        alert("スタート地点変更");
+        parts = start_point_text.value.split(',');
+        start_point["d"] = parts[0];
+        start_point["e"] = parts[1];
+        //マーカーを移動する。
+        start_point_marker.position = start_point;
+    });
+    var end_point_text = document.getElementById("end_point");
+    end_point_text.addEventListener("change", function(e){
+        alert("エンド地点変更");
+        parts = end_point_text.value.split(',');
+        end_point["d"] = parts[0];
+        end_point["e"] = parts[1];
+        //マーカーを移動する。
+        end_point_marker.position = end_point;
     });
 
+    //max_pointに関して
+    var max_point = document.getElementById("max_point").value;
+    console.log(max_point);
+    //max_pointが変更したらする処理
+    var max_point_text = document.getElementById("max_point");
+    max_point_text.addEventListener("change", function(e){
+        alert("max_point変更");
+        max_point = document.getElementById("max_point").value;
+    });
 
+    //画像保存に関して
+    var save_image_flag = document.getElementById("save_image").checked;
+    var save_image_checkbox = document.getElementById("save_image");
+    save_image_checkbox.addEventListener("change", function(e){
+        alert("画像保存を変更");
+        save_image_flag = document.getElementById("save_image").checked;
+    });
 
+    //generateボタンを押したらする処理
+    var generate_button = document.getElementById("generate");
+    generate_button.addEventListener("click", function(){
+        // console.log(self);
+        generate();
+    });
 
-
-    // return;
-
-    var position_array;
-
-    var directions_service = new google.maps.DirectionsService();
-    var request = {
-        origin: start_point,
-        destination: end_point,
-        travelMode: google.maps.DirectionsTravelMode.DRIVING
-    };
-    directions_service.route(request, function(response, status)
+    //スタートしたらするメソッド
+    var generate = function()
     {
-        //ルートの取得に成功
-        console.log("ルートの取得に成功");
-        //位置情報を取得する。
-        // var overview_paths = response['routes'][0]['overview_path'];
-        var overview_paths = handleDirectionsRoute(response);
-        console.log(overview_paths);
-        var streetview_path_array = [];
-        for(var i=0,d = overview_paths.length; i < overview_paths.length-1; i++ )
-        {
-            // console.log(overview_paths[i]);
-            //角度を計算する。
-            //10までにする。
-            // if( i < 20)
-            // {
-                var direction = geoDirection(overview_paths[i]['d'],overview_paths[i]['e'],overview_paths[i+1]['d'],overview_paths[i+1]['e']);
-                var streetview_path = "http://maps.googleapis.com/maps/api/streetview?size=650x650&location="+overview_paths[i]['d']+","+overview_paths[i]['e']+"&heading="+ direction+"&sensor=false";
-                streetview_path_array[i] = streetview_path;
-            // }
-        }
-        // console.log(streetview_path_array);
-        console.log(streetview_path_array.length);
-
-        //画像をすべてロードする。
-        ja.imageUnitObj.addEventListener("onLoad",this);
-        ja.imageUnitObj.load(streetview_path_array);
-
-        this.onLoad = function()
-        {
-            window.scrollTo(0, 1); //アドレスバーを消す
-            ja.imageUnitObj.removeEventListener("onLoad",this);
-            console.log('画像のロード終わる');
-
-            //フォルダを生成する。
-            jQuery.post('/start');
-
-
-            //2秒ごとに表示
-            var sleep_time = 200;
-            // 実処理の実行
-            act();
-            function act(){
-                // パラメータが無くなっていれば終了
-                if(ja.imageUnitObj.imageArray.length==0) return;
-                // 配列の先頭を取得する。
-                image = ja.imageUnitObj.imageArray[0];
-                //画像を表示
-                console.log('表示する');
-                //画像を張る
-                ja.stage.addChild(image);
-                //大きさを調整する。
-                image.x = 0;
-                image.y = 0;
-                image.w = $(window).width();
-                image.h = 680;
-                //画像を取得する。
-
-
-
-                // 処理済みのパラメータ削除
-                ja.imageUnitObj.imageArray.shift();
-                // 次の回の実行予約
-                setTimeout(function(){
-                    act();
-                }, sleep_time);
-                // これで１回の処理は終了
-                console.log('一定期間スリープ');
-            }
-
-
-
-
-           ;
-
-
-
-        };
-
-
-
-
-
-    });
+        console.log("generate開始");
 
 
 
@@ -166,8 +282,19 @@ Main = function()
 
 
 
+    }
 
-};
+
+
+
+
+
+}
+
+
+
+
+
 
 //2点間の位置情報の角度
 function geoDirection(lat1, lng1, lat2, lng2) {
@@ -256,6 +383,16 @@ var handleDirectionsRoute = function(response) {
 
     return _raw_points;
 };
+
+
+
+
+
+
+
+
+
+
 
 var pointOnLine = function(t, a, b) {
     var lat1 = a.lat().toRad(), lon1 = a.lng().toRad();
