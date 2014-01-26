@@ -110,6 +110,8 @@ StreetView = function()
     //ストリートビューをいれる緯度経度をいれる配列
     var position_array;
     var is_loading = false;
+    var overview_paths;
+    var streetview_path_array = [];
 
     //沖縄の地点をデフォルトに設定する。
     var start_point = new google.maps.LatLng(26.331624,127.921188);
@@ -134,8 +136,8 @@ StreetView = function()
         position: start_point,
         map: map,
         title: "スタート地点",
-        draggable: true,
-        icon: "http://maps.google.com/mapfiles/marker_black.png"
+        draggable: true
+        // icon: "http://maps.google.com/mapfiles/marker_black.png"
     });
     var start_point_window = new google.maps.InfoWindow({
         content: "スタート地点",
@@ -221,6 +223,7 @@ StreetView = function()
             return;
         }
         console.log("generate開始");
+        document.getElementById("state").innerHTML = "ロード中";
         is_loading = true;
 
         var directions_service = new google.maps.DirectionsService();
@@ -239,6 +242,66 @@ StreetView = function()
             }
             //ルートに色をつける
             directions_display.setDirections(response);
+            //位置情報を取得する。
+            // var overview_paths = response['routes'][0]['overview_path'];
+            overview_paths = handleDirectionsRoute(response);
+            document.getElementById("frame").innerHTML = overview_paths.length;
+
+            for(var i=0,d = overview_paths.length; i < overview_paths.length-1; i++ )
+            {
+                var direction = geoDirection(overview_paths[i]['d'],overview_paths[i]['e'],overview_paths[i+1]['d'],overview_paths[i+1]['e']);
+                var streetview_path = "http://maps.googleapis.com/maps/api/streetview?size=650x650&location="+overview_paths[i]['d']+","+overview_paths[i]['e']+"&heading="+ direction+"&sensor=false";
+                streetview_path_array[i] = streetview_path;
+            }
+
+            //画像をすべてロードする。
+            ja.imageUnitObj.addEventListener("onLoad",this);
+            ja.imageUnitObj.load(streetview_path_array);
+
+            this.onLoad = function()
+            {
+                window.scrollTo(0, 1); //アドレスバーを消す
+                ja.imageUnitObj.removeEventListener("onLoad",this);
+                console.log('画像のロード終わる');
+
+                //フォルダを生成する。
+                // jQuery.post('/start');
+
+                //2秒ごとに表示
+                var sleep_time = 200;
+                // 実処理の実行
+                act();
+                function act(){
+                    // パラメータが無くなっていれば終了
+                    if(ja.imageUnitObj.imageArray.length==0) return;
+                    // 配列の先頭を取得する。
+                    image = ja.imageUnitObj.imageArray[0];
+                    //画像を表示
+                    console.log('表示する');
+                    //画像を張る
+                    ja.stage.addChild(image);
+                    //大きさを調整する。
+                    image.x = 0;
+                    image.y = 0;
+                    image.w = $(window).width();
+                    image.h = 680;
+                    //画像を取得する。
+
+
+                    // 処理済みのパラメータ削除
+                    ja.imageUnitObj.imageArray.shift();
+                    // 次の回の実行予約
+                    setTimeout(function(){
+                        act();
+                    }, sleep_time);
+                    // これで１回の処理は終了
+                    console.log('一定期間スリープ');
+                }
+
+            };
+
+
+
 
 
 
@@ -249,6 +312,75 @@ StreetView = function()
 
     }
 
+    var handleDirectionsRoute = function(response) {
+        var route = response.routes[0];
+        // var _max_points = 100;
+        var _distance_between_points = 5;
+        // var pointOnLine =
+        var path = route.overview_path;
+        // console.log("はじめの点の数"+path.length);
+        // console.log(path);
+        var _raw_points = [];
+        var legs = route.legs;
+
+
+        var total_distance = 0;
+        for(var i=0; i<legs.length; ++i) {
+            total_distance += legs[i].distance.value;
+        }
+
+        var segment_length = total_distance/max_point;
+        _d = (segment_length < _distance_between_points) ? _d = _distance_between_points : _d = segment_length;
+
+        var d = 0;
+        var r = 0;
+        var a, b;
+
+        for(i=0; i<path.length; i++) {
+            if(i+1 < path.length) {
+                a = path[i];
+                b = path[i+1];
+                d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
+                if(r > 0 && r < d) {
+
+                    a = pointOnLine(r/d, a, b);
+
+                    d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
+                    _raw_points.push(a);
+
+                    r = 0;
+                } else if(r > 0 && r > d) {
+                    r -= d;
+                }
+
+                if(r === 0) {
+
+                    var segs = Math.floor(d/_d);
+
+                    if(segs > 0) {
+                        for(var j=0; j<segs; j++) {
+                            var t = j/segs;
+
+                            if( t>0 || (t+i)===0  ) { // not start point
+                                var way = pointOnLine(t, a, b);
+                                _raw_points.push(way);
+                            }
+                        }
+
+                        r = d-(_d*segs);
+                    } else {
+                        r = _d*( 1-(d/_d) );
+                    }
+                }
+
+            }
+            else
+            {
+                _raw_points.push(path[i]);
+            }
+        }
+        return _raw_points;
+    };
 
 
 
@@ -273,79 +405,6 @@ function geoDirection(lat1, lng1, lat2, lng2) {
     return dirN0;
 }
 
-var handleDirectionsRoute = function(response) {
-
-    var route = response.routes[0];
-    var _max_points = 100;
-    var _distance_between_points = 5;
-    // var pointOnLine =
-    var path = route.overview_path;
-    // console.log("はじめの点の数"+path.length);
-    // console.log(path);
-    var _raw_points = [];
-    var legs = route.legs;
-
-
-    var total_distance = 0;
-    for(var i=0; i<legs.length; ++i) {
-        total_distance += legs[i].distance.value;
-    }
-
-    var segment_length = total_distance/_max_points;
-    _d = (segment_length < _distance_between_points) ? _d = _distance_between_points : _d = segment_length;
-
-    var d = 0;
-    var r = 0;
-    var a, b;
-
-    for(i=0; i<path.length; i++) {
-        if(i+1 < path.length) {
-            a = path[i];
-            b = path[i+1];
-            d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
-            if(r > 0 && r < d) {
-
-                a = pointOnLine(r/d, a, b);
-
-                d = google.maps.geometry.spherical.computeDistanceBetween(a, b);
-                _raw_points.push(a);
-
-                r = 0;
-            } else if(r > 0 && r > d) {
-                r -= d;
-            }
-
-            if(r === 0) {
-
-                var segs = Math.floor(d/_d);
-
-                if(segs > 0) {
-                    for(var j=0; j<segs; j++) {
-                        var t = j/segs;
-
-                        if( t>0 || (t+i)===0  ) { // not start point
-                            var way = pointOnLine(t, a, b);
-                            _raw_points.push(way);
-                        }
-                    }
-
-                    r = d-(_d*segs);
-                } else {
-                    r = _d*( 1-(d/_d) );
-                }
-            }
-
-        }
-        else
-        {
-            _raw_points.push(path[i]);
-        }
-    }
-
-    // parsePoints(response);
-
-    return _raw_points;
-};
 
 
 
