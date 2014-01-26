@@ -4,68 +4,6 @@ Main = function()
     //ここから処理がはじまる。
     var streetview = new StreetView();
     // console.log(streetview);
-    //沖縄の地点
-    // var start_point = new google.maps.LatLng(26.331624,127.921188);
-    // var end_point = new google.maps.LatLng(26.327874,127.957173);
-    // //スタート地点とエンド地点の経度緯度を表示
-    // document.getElementById("start_point").value = start_point["d"]+","+start_point["e"];
-    // document.getElementById("end_point").value = end_point["d"]+","+end_point["e"];
-
-    // //GoogleMapを表示
-    // var map;
-    // var mapOpt = {
-    //     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    //     center: start_point,
-    //     zoom: 12
-    // };
-    // map = new google.maps.Map(document.getElementById("map"), mapOpt);
-
-    // //スタート地点とエンドポイントにマークをつける。
-    // var start_point_marker = new google.maps.Marker({
-    //     position: start_point,
-    //     map: map,
-    //     title: "スタート地点",
-    //     draggable: true,
-    //     icon: "http://maps.google.com/mapfiles/marker_black.png"
-    // });
-    // var start_point_window = new google.maps.InfoWindow({
-    //     content: "スタート地点",
-    //     maxWidth: 100
-    // });
-    // start_point_window.open(map,start_point_marker);
-    // var end_point_marker = new google.maps.Marker({
-    //     position: end_point,
-    //     map: map,
-    //     title: "エンド地点",
-    //     draggable: true
-    // });
-    // var end_point_window = new google.maps.InfoWindow({
-    //     content: "エンド地点",
-    //     maxWidth: 100
-    // });
-    // end_point_window.open(map,end_point_marker);
-    // google.maps.event.addListener(start_point_marker,"dragend",function(e)
-    // {
-    //     console.log(e);
-    //     // marker.
-    //     // window.setTimeout(function() {
-    //     //   map.panTo(marker.getPosition());
-    //     // }, 3000);
-    // });
-    // google.maps.event.addListener(end_point_marker,"dragend",function(e)
-    // {
-    //     console.log(e);
-    //     // marker.
-    //     // window.setTimeout(function() {
-    //     //   map.panTo(marker.getPosition());
-    //     // }, 3000);
-    // });
-
-
-
-
-
-    // // return;
 
     // var position_array;
 
@@ -169,6 +107,10 @@ StreetView = function()
     console.log("StreetViewオブジェクトを取得する。");
     //はじめにする処理。
     var self = this;
+    //ストリートビューをいれる緯度経度をいれる配列
+    var position_array;
+    var is_loading = false;
+
     //沖縄の地点をデフォルトに設定する。
     var start_point = new google.maps.LatLng(26.331624,127.921188);
     var end_point = new google.maps.LatLng(26.327874,127.957173);
@@ -184,6 +126,8 @@ StreetView = function()
         zoom: 12
     };
     map = new google.maps.Map(document.getElementById("map"), mapOpt);
+    var directions_display = new google.maps.DirectionsRenderer();
+    directions_display.setMap(map);
 
     //スタート地点とエンドポイントにマークをつける。
     var start_point_marker = new google.maps.Marker({
@@ -246,7 +190,6 @@ StreetView = function()
 
     //max_pointに関して
     var max_point = document.getElementById("max_point").value;
-    console.log(max_point);
     //max_pointが変更したらする処理
     var max_point_text = document.getElementById("max_point");
     max_point_text.addEventListener("change", function(e){
@@ -272,19 +215,39 @@ StreetView = function()
     //スタートしたらするメソッド
     var generate = function()
     {
+        //ロード中は実行されないようにする。
+        if(is_loading == true)
+        {
+            return;
+        }
         console.log("generate開始");
+        is_loading = true;
+
+        var directions_service = new google.maps.DirectionsService();
+        var request = {
+            origin: start_point,
+            destination: end_point,
+            travelMode: google.maps.DirectionsTravelMode.DRIVING
+        };
+        directions_service.route(request, function(response, status)
+        {
+            console.log("ルート取得");
+            if(status!= "OK")
+            {
+                alert("ルートが取得できませんでした");
+                return;
+            }
+            //ルートに色をつける
+            directions_display.setDirections(response);
 
 
 
 
 
 
-
-
+        });
 
     }
-
-
 
 
 
