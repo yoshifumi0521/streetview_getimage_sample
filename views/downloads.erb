@@ -18,7 +18,9 @@
 <h1>ダウンロードした画像一覧</h1>
 
 <ul>
-
+    <% @directories.each do |f| %>
+        <li><%= f %></li>
+    <% end %>
 </ul>
 
 </body>
