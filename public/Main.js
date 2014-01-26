@@ -219,17 +219,18 @@ StreetView = function()
                     if(save_image_flag == true)
                     {
                         // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
-                        var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
-                        jQuery.post("/save/from/"+from +"/to/"+to,
-                        {
-                            image: image,
-                            index: count
-                        });
+                        // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
+                        // jQuery.post("/save/from/"+from +"/to/"+to,
+                        // {
+                        //     image: image,
+                        //     index: count
+                        // });
                         //canvasの画像を作成
-                        // var img　=　new Image();
-                        // var type = 'image/jpeg';
-                        // img.src = document.getElementById('ja_canvas').toDataURL(type);
-                        // console.log(img.src);
+                        var img　=　new Image();
+                        var type = 'image/jpeg';
+                        // img.crossOrigin = "Anonymous";
+                        img.src = document.getElementById('ja_canvas').toDataURL(type);
+                        console.log(img.src);
                         // img.onload = function(){
                         // //例：現在のウィンドウに出力。
                         //     location.href = img.src;

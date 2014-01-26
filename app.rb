@@ -1,11 +1,19 @@
 #main.rb
 require "sinatra"
 require 'sinatra/reloader'
+require 'sinatra/cross_origin'
+# enable :cross_origin
 require 'fileutils'
 require 'base64'
 
+configure do
+  enable :cross_origin
+end
+
+
 get '/' do
-    erb :index
+  cross_origin
+  erb :index
 end
 
 #フォルダを作成する。
@@ -26,6 +34,7 @@ post '/save/from/:start_point/to/:end_point' do
   File.open("data/#{name}/#{filename}", 'wb') do |f|
     f.write Base64.decode64(params[:image])
   end
+  response.headers['Access-Control-Allow-Origin'] = '*'
 end
 
 
