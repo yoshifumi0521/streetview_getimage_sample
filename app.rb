@@ -18,16 +18,16 @@ get '/' do
 end
 
 get '/downloads' do
-  @directories = Array.new
-  Dir::foreach('data') {|f|
-    if f != '.' && f!= '..' && f!= '.DS_Store'
-      @directories.push f
-    end
-    # if File::ftype(f) == "directory"
-    #   puts "#{f} is directory"
-    # end
-  }
-  p @directories
+  # @directories = Array.new
+  # Dir::foreach('data') {|f|
+  #   if f != '.' && f!= '..' && f!= '.DS_Store'
+  #     @directories.push f
+  #   end
+  #   # if File::ftype(f) == "directory"
+  #   #   puts "#{f} is directory"
+  #   # end
+  # }
+  # p @directories
   # @directories = "aaa"
   erb :downloads
 end
