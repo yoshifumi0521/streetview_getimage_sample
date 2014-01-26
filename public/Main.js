@@ -161,14 +161,14 @@ StreetView = function()
                 streetview_path_array[i] = streetview_path;
             }
 
-            if(save_image_flag == true)
-            {
-                console.log("ディレクトを作成");
-                //ディレクトリを作成
-                // jQuery.post('/start');
+            // if(save_image_flag == true)
+            // {
+            //     console.log("すでにあるディレクトリを削除して、新しいディレクトリを保存");
+            //     //ディレクトリを作成
+            //     jQuery.post('/start');
 
 
-            }
+            // }
 
 
             // return;
