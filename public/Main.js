@@ -161,15 +161,25 @@ StreetView = function()
                 streetview_path_array[i] = streetview_path;
             }
 
-            // if(save_image_flag == true)
-            // {
-            //     console.log("すでにあるディレクトリを削除して、新しいディレクトリを保存");
-            //     //ディレクトリを作成
-            //     jQuery.post('/start');
 
+            if(save_image_flag == true)
+            {
+                console.log("すでにあるディレクトリを削除して、新しいディレクトリを保存");
+                //ディレクトリを作成
+                var from = start_point["d"]+","+start_point["e"];
+                var to = end_point["d"]+","+end_point["e"];
+                jQuery.post("/start/from/"+from +"/to/"+to);
 
-            // }
+                //canvasの画像を作成
+                // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
+                // // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
+                // jQuery.post("/save/from/"+from +"/to/"+to,
+                // {
+                //     image: image,
+                //     index: 1
+                // });
 
+            }
 
             // return;
             //画像をすべてロードする。
@@ -181,15 +191,17 @@ StreetView = function()
                 window.scrollTo(0, 1); //アドレスバーを消す
                 ja.imageUnitObj.removeEventListener("onLoad",this);
                 console.log('画像のロード終わる');
-
+                document.getElementById("state").innerHTML = "表示中";
                 //フォルダを生成する。
                 // jQuery.post('/start');
 
                 //2秒ごとに表示
                 var sleep_time = 200;
                 // 実処理の実行
+                var count = 1;
                 act();
-                function act(){
+                function act()
+                {
                     // パラメータが無くなっていれば終了
                     if(ja.imageUnitObj.imageArray.length==0) return;
                     // 配列の先頭を取得する。
@@ -204,8 +216,31 @@ StreetView = function()
                     image.w = $(window).width();
                     image.h = 680;
                     //画像を取得する。
-
-
+                    if(save_image_flag == true)
+                    {
+                        // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
+                        var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
+                        jQuery.post("/save/from/"+from +"/to/"+to,
+                        {
+                            image: image,
+                            index: count
+                        });
+                        //canvasの画像を作成
+                        // var img　=　new Image();
+                        // var type = 'image/jpeg';
+                        // img.src = document.getElementById('ja_canvas').toDataURL(type);
+                        // console.log(img.src);
+                        // img.onload = function(){
+                        // //例：現在のウィンドウに出力。
+                        //     location.href = img.src;
+                        // };
+                        // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
+                        // jQuery.post("/save/from/"+from +"/to/"+to,
+                        // {
+                        //     image: image,
+                        //     index: i
+                        // });
+                    }
                     // 処理済みのパラメータ削除
                     ja.imageUnitObj.imageArray.shift();
                     // 次の回の実行予約
@@ -214,6 +249,7 @@ StreetView = function()
                     }, sleep_time);
                     // これで１回の処理は終了
                     console.log('一定期間スリープ');
+                    count++;
                 }
 
             };
