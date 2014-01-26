@@ -161,6 +161,17 @@ StreetView = function()
                 streetview_path_array[i] = streetview_path;
             }
 
+            if(save_image_flag == true)
+            {
+                console.log("ディレクトを作成");
+                //ディレクトリを作成
+                // jQuery.post('/start');
+
+
+            }
+
+
+            // return;
             //画像をすべてロードする。
             ja.imageUnitObj.addEventListener("onLoad",this);
             ja.imageUnitObj.load(streetview_path_array);
@@ -207,7 +218,8 @@ StreetView = function()
 
             };
 
-
+            //画像すべて表示したら。is_loadingをfalseにする。
+            is_loading = false;
 
 
 
