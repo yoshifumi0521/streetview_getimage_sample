@@ -10,8 +10,8 @@ require 'find'
 require 'kconv'
 # require 'net/http'
 require 'open-uri'
-# require 'zipruby'
-require 'zip'
+require 'zipruby'
+# require 'zip'
 # require 'RMagick'
 
 # configure do
@@ -39,16 +39,16 @@ get '/downloads' do
   #   # next if d == "." or d == ".." or d == ".DS_Store"
   #   # next if File::ftype(d) != "directory"
   #   #   puts d
+    folder = "zip"
     if d != '.' && d!= '..' && d!= '.DS_Store'
       zipfile = d + ".zip"
       # files = ["data/"+d]
       unless FileTest.exist?("zip/"+zipfile)
         Zip::Archive.open("zip/"+zipfile, Zip::CREATE) do |arc|
-          p arc
           Dir::foreach("data/"+d) do |f|
             if f != '.' && f!= '..' && f!= '.DS_Store'
-              arc.add_file(f)
               # p f
+              arc.add_file(f)
             end
           end
         end
