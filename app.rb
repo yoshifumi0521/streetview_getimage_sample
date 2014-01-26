@@ -46,10 +46,11 @@ get '/downloads' do
       unless FileTest.exist?("zip/"+zipfile)
         Zip::Archive.open("zip/"+zipfile, Zip::CREATE) do |arc|
           Dir::foreach("data/"+d) do |f|
+            p f
             begin
               if f != '.' && f!= '..' && f!= '.DS_Store'
                 # p f
-                arc.add_file(f)
+                arc.add_file("data/"+d+ "/"+f)
               end
             rescue
               puts "fail"
