@@ -6,11 +6,12 @@ require 'fileutils'
 require 'base64'
 require 'open-uri'
 require 'find'
-require 'zip/zip'
+# require 'zip/zip'
 require 'kconv'
 # require 'net/http'
 require 'open-uri'
-require 'zipruby'
+# require 'zipruby'
+require 'zip'
 # require 'RMagick'
 
 # configure do
@@ -123,26 +124,26 @@ post '/save' do
 
 end
 
-def zip(src, dest, options = {})
-  File.unlink(dest) if File.exist?(dest)
-  Zip::ZipFile.open(dest, Zip::ZipFile::CREATE) do |zf|
-    make_zip(zf, src, options)
-  end
-end
+# def zip(src, dest, options = {})
+#   File.unlink(dest) if File.exist?(dest)
+#   Zip::ZipFile.open(dest, Zip::ZipFile::CREATE) do |zf|
+#     make_zip(zf, src, options)
+#   end
+# end
 
-def make_zip(zf, src, options)
-  if File.file?(src)
-    zf.add(src, src)
-    return
-  elsif File.directory?(src)
-    zf.mkdir(src)
-    Dir.foreach(src) do |f|
-      next if f == "." or f == ".."
-      make_zip(zf, src + '/' + f, options)
-    end
-    return
-  end
-end
+# def make_zip(zf, src, options)
+#   if File.file?(src)
+#     zf.add(src, src)
+#     return
+#   elsif File.directory?(src)
+#     zf.mkdir(src)
+#     Dir.foreach(src) do |f|
+#       next if f == "." or f == ".."
+#       make_zip(zf, src + '/' + f, options)
+#     end
+#     return
+#   end
+# end
 
 def save_file(url)
   filename = File.basename(url)
