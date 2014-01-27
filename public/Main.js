@@ -20,7 +20,7 @@ StreetView = function()
     var overview_paths;
     var streetview_path_array = [];
     var domain = location.href.split('/')[2];
-    if(domain = "localhost:4567")
+    if(domain == "localhost:4567")
     {
         //ローカルhttp://localhost:4567
         var app_key = "AIzaSyCc74DjkQmdoqAEPfiqVWKNOB8AS7JfDGI";
