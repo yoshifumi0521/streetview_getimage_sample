@@ -19,6 +19,10 @@ StreetView = function()
     var is_loading = false;
     var overview_paths;
     var streetview_path_array = [];
+    //ローカルhttp://localhost:4567
+    // var app_key = "AIzaSyCc74DjkQmdoqAEPfiqVWKNOB8AS7JfDGI";
+    //herokuのhttp://blooming-atoll-7041.herokuapp.com
+    var app_key =　"AIzaSyDQOgy8kH0MtRaDpIT7rnq0dU33cglxOFU";
 
     //沖縄の地点をデフォルトに設定する。
     var start_point = new google.maps.LatLng(26.331624,127.921188);
@@ -157,7 +161,7 @@ StreetView = function()
             for(var i=0,d = overview_paths.length; i < overview_paths.length-1; i++ )
             {
                 var direction = geoDirection(overview_paths[i]['d'],overview_paths[i]['e'],overview_paths[i+1]['d'],overview_paths[i+1]['e']);
-                var streetview_path = "http://maps.googleapis.com/maps/api/streetview?size=650x650&location="+overview_paths[i]['d']+","+overview_paths[i]['e']+"&heading="+ direction+"&sensor=false";
+                var streetview_path = "http://maps.googleapis.com/maps/api/streetview?size=650x650&location="+overview_paths[i]['d']+","+overview_paths[i]['e']+"&heading="+ direction+"&sensor=false&key="+app_key;
                 streetview_path_array[i] = streetview_path;
             }
 
