@@ -104,7 +104,7 @@ post '/start/from/:start_point/to/:end_point' do
   FileUtils.mkdir_p("data") unless FileTest.exist?("data")
   #削除する。
   name = "from"+params[:start_point]+"to"+params[:end_point];
-  FileUtils.rm_rf("data/"+name);
+  FileUtils.rm_rf("data/"+name) if FileTest.exist?("data/"+name)
   #新しい画像ディレクトリを作成
   FileUtils.mkdir_p("data/"+name)
 end
