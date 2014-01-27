@@ -99,18 +99,18 @@ get '/download/:name' do
 end
 
 #フォルダを作成する。
-post '/start/from/:start_point/to/:end_point' do
+post '/start/from/:start_point/to/:end_point/frame/:frame' do
   # FileUtils.rm_rf('data')
   FileUtils.mkdir_p("data") unless FileTest.exist?("data")
   #削除する。
-  name = "from"+params[:start_point]+"to"+params[:end_point];
+  name = "from"+params[:start_point]+"to"+params[:end_point]+"frame"+params[:frame];
   FileUtils.rm_rf("data/"+name) if FileTest.exist?("data/"+name)
   #新しい画像ディレクトリを作成
   FileUtils.mkdir_p("data/"+name)
 end
 
 post '/save' do
-  name = "from"+params[:from]+"to"+params[:to];
+  name = "from"+params[:from]+"to"+params[:to]+"frame"+params[:frame];
   fileName = "%08d.jpg"%params[:count]
   dirName = "data/#{name}/"
   filePath = dirName + fileName

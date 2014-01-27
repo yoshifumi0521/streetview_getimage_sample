@@ -172,13 +172,13 @@ StreetView = function()
                 //ディレクトリを作成
                 var from = start_point["d"]+","+start_point["e"];
                 var to = end_point["d"]+","+end_point["e"];
-                jQuery.post("/start/from/"+from +"/to/"+to);
+                jQuery.post("/start/from/"+from +"/to/"+to+"/frame/"+max_point);
 
                 for(var i=0,d = streetview_path_array.length; i < overview_paths.length-1; i++ )
                 {
                     jQuery.post(
                         "/save",
-                        {from: from,to: to,count: i+1,url: streetview_path_array[i]}
+                        {from: from,to: to,count: i+1,url: streetview_path_array[i],frame: max_point}
                     );
                 }
             }
