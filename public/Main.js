@@ -19,10 +19,17 @@ StreetView = function()
     var is_loading = false;
     var overview_paths;
     var streetview_path_array = [];
-    //ローカルhttp://localhost:4567
-    // var app_key = "AIzaSyCc74DjkQmdoqAEPfiqVWKNOB8AS7JfDGI";
-    //herokuのhttp://blooming-atoll-7041.herokuapp.com
-    var app_key =　"AIzaSyDQOgy8kH0MtRaDpIT7rnq0dU33cglxOFU";
+    var domain = location.href.split('/')[2];
+    if(domain = "localhost:4567")
+    {
+        //ローカルhttp://localhost:4567
+        var app_key = "AIzaSyCc74DjkQmdoqAEPfiqVWKNOB8AS7JfDGI";
+    }
+    else
+    {
+        //herokuのhttp://blooming-atoll-7041.herokuapp.com
+        var app_key =　"AIzaSyDQOgy8kH0MtRaDpIT7rnq0dU33cglxOFU";
+    }
 
     //沖縄の地点をデフォルトに設定する。
     var start_point = new google.maps.LatLng(26.331624,127.921188);
