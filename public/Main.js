@@ -228,8 +228,9 @@ StreetView = function()
                     //前の画像のオブジェクトを削除して、なくす
                     // if(count != 1)
                     // {
-                    //     image.removeEventListener("onLoad",this);
-                    //     image = null;
+                    //     console.log(ja.stage);
+                    //     // image.removeEventListener("onLoad",this);
+                    //     // image = null;
                     // }
 
                     //大きさを調整する。
@@ -265,6 +266,10 @@ StreetView = function()
                     //     // });
                     // }
                     // 処理済みのパラメータ削除
+                    ja.imageUnitObj.imageArray[0].removeEventListener("onLoad",this);
+                    ja.imageUnitObj.imageArray[0] = null;
+
+                    //削除するオブジェクトを解放する。
                     ja.imageUnitObj.imageArray.shift();
                     // 次の回の実行予約
                     setTimeout(function(){
