@@ -117,6 +117,15 @@ StreetView = function()
         max_point = document.getElementById("max_point").value;
     });
 
+    //ズームに関して
+    var zoom = document.getElementById("zoom").value;
+    //zoomが変更したらする処理
+    var zoom_text = document.getElementById("zoom");
+    zoom_text.addEventListener("change", function(e){
+        alert("zoom変更");
+        zoom = document.getElementById("zoom").value;
+    });
+
     //画像保存に関して
     var save_image_flag = document.getElementById("save_image").checked;
     var save_image_checkbox = document.getElementById("save_image");
@@ -168,10 +177,9 @@ StreetView = function()
             for(var i=0,d = overview_paths.length; i < overview_paths.length-1; i++ )
             {
                 var direction = geoDirection(overview_paths[i]['d'],overview_paths[i]['e'],overview_paths[i+1]['d'],overview_paths[i+1]['e']);
-                var streetview_path = "http://maps.googleapis.com/maps/api/streetview?size=650x650&location="+overview_paths[i]['d']+","+overview_paths[i]['e']+"&heading="+ direction+"&sensor=false&key="+app_key;
+                var streetview_path = "http://maps.googleapis.com/maps/api/streetview?size=650x650&fov="+zoom+"&location="+overview_paths[i]['d']+","+overview_paths[i]['e']+"&heading="+ direction+"&sensor=false&key="+app_key;
                 streetview_path_array[i] = streetview_path;
             }
-
 
             if(save_image_flag == true)
             {
@@ -216,9 +224,14 @@ StreetView = function()
                     // 配列の先頭を取得する。
                     image = ja.imageUnitObj.imageArray[0];
                     //画像を表示
-                    console.log('表示する');
-                    //画像を張る
                     ja.stage.addChild(image);
+                    //前の画像のオブジェクトを削除して、なくす
+                    // if(count != 1)
+                    // {
+                    //     image.removeEventListener("onLoad",this);
+                    //     image = null;
+                    // }
+
                     //大きさを調整する。
                     image.x = 0;
                     image.y = 0;
