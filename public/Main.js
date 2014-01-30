@@ -20,6 +20,8 @@ StreetView = function()
     var overview_paths;
     var streetview_path_array = [];
     var domain = location.href.split('/')[2];
+    var matrix = [0,-1,0,-1,5,-1,0,-1,0];
+
     if(domain == "localhost:4567")
     {
         //ローカルhttp://localhost:4567
@@ -223,48 +225,23 @@ StreetView = function()
                     if(ja.imageUnitObj.imageArray.length==0) return;
                     // 配列の先頭を取得する。
                     image = ja.imageUnitObj.imageArray[0];
-                    //画像を表示
-                    ja.stage.addChild(image);
-                    //前の画像のオブジェクトを削除して、なくす
-                    // if(count != 1)
-                    // {
-                    //     console.log(ja.stage);
-                    //     // image.removeEventListener("onLoad",this);
-                    //     // image = null;
-                    // }
-
                     //大きさを調整する。
                     image.x = 0;
                     image.y = 0;
                     image.w = $(window).width();
                     image.h = 680;
-                    //画像を取得する。
-                    // if(save_image_flag == true)
-                    // {
-                    //     // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
-                    //     // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
-                    //     // jQuery.post("/save/from/"+from +"/to/"+to,
-                    //     // {
-                    //     //     image: image,
-                    //     //     index: count
-                    //     // });
-                    //     //canvasの画像を作成
-                    //     var img　=　new Image();
-                    //     var type = 'image/jpeg';
-                    //     // img.crossOrigin = "Anonymous";
-                    //     img.src = document.getElementById('ja_canvas').toDataURL(type);
-                    //     console.log(img.src);
-                    //     // img.onload = function(){
-                    //     // //例：現在のウィンドウに出力。
-                    //     //     location.href = img.src;
-                    //     // };
-                    //     // var image = document.getElementById('ja_canvas').toDataURL('image/jpeg').replace('data:image/jpeg;base64,', '');
-                    //     // jQuery.post("/save/from/"+from +"/to/"+to,
-                    //     // {
-                    //     //     image: image,
-                    //     //     index: i
-                    //     // });
-                    // }
+                    //画像を表示
+                    ja.stage.addChild(image);
+
+                    //画像処理
+                    var canvas = document.getElementById('ja_canvas');
+                    var content = canvas.getContext('2d');
+                    var image_data = content.getImageData(0, 0,image.w,image.h);
+                    console.log(image_data);
+
+                    var new_image_data = ConvolutionFilter(image_data, matrix);
+                    console.log(new_image_data);
+                    return;
                     // 処理済みのパラメータ削除
                     ja.imageUnitObj.imageArray[0].removeEventListener("onLoad",this);
                     ja.imageUnitObj.imageArray[0] = null;
@@ -388,15 +365,69 @@ function geoDirection(lat1, lng1, lat2, lng2) {
     return dirN0;
 }
 
+//フィルター
+function ConvolutionFilter(imageData, matrix)
+{
+    var data = imageData.data;
 
+    // 参照用にオリジナルをコピー
+    var copy = new Uint8Array(data.length);
+    for (len = data.length, i = 0; i < len; i++) {
+        copy[i] = data[i];
+    }
 
+    var width = imageData.width;
+    var height = imageData.height;
 
+    var size = Math.sqrt(matrix.length);
+    var div  = size * 0.5 | 0;
 
+    var x, y;
+    var r, g, b, v;
+    var i, j;
+    var istep, jstep, kstep;
+    var sx, sy;
+    var cx, cy;
+    var scy, scx;
 
+    for (y = 0; y < height; y++) {
+        istep = y * width;
 
+        for (x = 0; x < width; x++) {
+            r = g = b = 0;
 
+            for (sy = -div; sy <= div; sy++) {
+                cy = y + sy;
+                jstep = cy * width;
+                kstep = (sy + div) * size;
 
+                for (sx = -div; sx <= div; sx++) {
+                    cx = x + sx;
 
+                    if (cy >= 0 && cy < height && cx >= 0 && cx < width) {
+                        j = (cx + jstep) << 2;
+                        v = matrix[(sx + div) + kstep];
+
+                        r += copy[j]     * v;
+                        g += copy[j + 1] * v;
+                        b += copy[j + 2] * v;
+                    }
+                }
+            }
+
+            if (r < 0) r = 0; else if (r > 255) r = 255;
+            if (g < 0) g = 0; else if (g > 255) g = 255;
+            if (b < 0) b = 0; else if (b > 255) b = 255;
+
+            i = (x + istep) << 2;
+
+            data[i]     = r;
+            data[i + 1] = g;
+            data[i + 2] = b;
+        }
+    }
+    return imageData;
+}
 
 
 var pointOnLine = function(t, a, b) {
